@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<header class="header">
+    <h1>analytics</h1>
+    <nav>
+        <a href="/">home</a>
+        <%= link_to "transfer", transfers_path %>
+        <a href="memo">memo</a>
+        <a href="/analytics">analytics</a>
+        <a href="/admin">admin</a>
+    </nav>
+</header>
+
+<!-- 上部のカウンターボックスと検索ボックス -->
+<div class="top-bar-analytics">
+    <div class="search-box">
+        <input type="text" id="handover-message" placeholder="申し送りを入力..." />
+        <button onclick="searchMember()">検索</button>
+    </div>
+</div>

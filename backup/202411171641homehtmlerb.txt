@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EngineerCafeManager</title>
+</head>
+
+<body>
+    <header class="header">
+        <h1>home</h1>
+        <nav>
+            <a href="/">home</a>
+            <%= link_to "message", messages_path %>
+            <a href="memo">memo</a>
+            <a href="/analytics">analytics</a>
+            <a href="/admin">admin</a>
+        </nav>
+    </header>
+
+    <!-- 上部のカウンターボックスと検索ボックス -->
+    <div class="top-bar">
+        <div class="search-box">
+            <%= react_component("SearchBox") %>
+        </div>
+    </div>
+
+    <!-- メインコンテンツ -->
+    <div class="main-content">
+
+        <!-- 左側コンテナ（メインホールと他のスペース） -->
+        <div class="left-container">
+            <!-- メインホール -->
+            <section class="section">
+                <h2>メインホール</h2>
+                <div class="main-hall">
+                    <div class="room" data-room-number="101">101</div>
+                    <div class="room" data-room-number="102">102</div>
+                    <div class="room" data-room-number="103">103</div>
+                    <div class="room" data-room-number="104">104</div>
+                    <div class="room" data-room-number="105">105</div>
+                    <div class="room" data-room-number="106">106</div>
+                    <div class="room" data-room-number="107">107</div>
+                    <div class="room" data-room-number="108">108</div>
+                    <div class="room" data-room-number="109">109</div>
+                    <div class="room" data-room-number="110">110</div>
+                    <div class="room" data-room-number="111">111</div>
+                    <div class="room" data-room-number="112">112</div>
+                    <div class="room" data-room-number="113">113</div>
+                    <div class="room" data-room-number="114">114</div>
+                    <div class="room" data-room-number="115">115</div>
+                    <div class="room" data-room-number="116">116</div>
+                    <div class="room" data-room-number="117">117</div>
+                    <div class="room" data-room-number="118">118</div>
+                    <div class="room" data-room-number="119">119</div>
+                    <div class="room" data-room-number="120">120</div>
+                </div>
+            </section>
+
+            <!-- 集中、ミーティング、Underスペースの横並びコンテナ -->
+            <div class="horizontal-sections">
+                <!-- 集中スペース -->
+                <section class="section">
+                    <h2>集中スペース</h2>
+                    <div class="rooms-container">
+                        <div class="room" data-room-number="1">1</div>
+                        <div class="room" data-room-number="2">2</div>
+                        <div class="room" data-room-number="3">3</div>
+                        <div class="room" data-room-number="4">4</div>
+                        <div class="room" data-room-number="5">5</div>
+                        <div class="room" data-room-number="6">6</div>
+                    </div>
+                </section>
+
+                <!-- ミーティングスペース -->
+                <section class="section">
+                    <h2>ミーティングスペース</h2>
+                    <div class="rooms-container">
+                        <div class="room" data-room-number="21">21</div>
+                        <div class="room" data-room-number="22">22</div>
+                        <div class="room" data-room-number="23">23</div>
+                        <div class="room" data-room-number="24">24</div>
+                        <div class="room" data-room-number="25">25</div>
+                        <div class="room" data-room-number="26">26</div>
+                    </div>
+                </section>
+
+                <!-- Underスペース -->
+                <section class="section">
+                    <h2>Underスペース</h2>
+                    <div class="rooms-container">
+                        <div class="room" data-room-number="11">11</div>
+                        <div class="room" data-room-number="12">12</div>
+                        <div class="room" data-room-number="13">13</div>
+                        <div class="room" data-room-number="14">14</div>
+                        <div class="room" data-room-number="15">15</div>
+                        <div class="room" data-room-number="16">防音室</div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <!-- 右側コンテナ（MAKERSスペースとテラス） -->
+        <div class="right-container">
+            <!-- MAKERSスペース -->
+            <section class="section">
+                <h2>MAKERSスペース</h2>
+                <div class="makers-container">
+                    <div class="room" data-room-number="31">31</div>
+                    <div class="room" data-room-number="32">32</div>
+                    <div class="room" data-room-number="33">33</div>
+                    <div class="room" data-room-number="34">34</div>
+            </section>
+
+            <!-- テラス -->
+            <section class="section">
+                <h2>テラス</h2>
+                <div class="terrace-container">
+                    <div class="room" data-room-number="41">41</div>
+                    <div class="room" data-room-number="42">42</div>
+                    <div class="room" data-room-number="43">43</div>
+                    <div class="room" data-room-number="44">44</div>
+                </div>
+            </section>
+        </div>
+    </div>
+</body>
+
+</html>

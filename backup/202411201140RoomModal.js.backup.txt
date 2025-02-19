@@ -1,0 +1,179 @@
+// import React, { useState, useEffect } from "react";
+
+// const RoomModal = ({ roomNumber, onClose }) => {
+//     const [registrantNumber, setRegistrantNumber] = useState("");
+//     const [registrantName, setRegistrantName] = useState("");
+//     const [occupyId, setOccupyId] = useState(null); // OccupyのIDを保持
+//     const [createdAt, setCreatedAt] = useState(""); // `created_at`の状態を保持
+
+//     // モーダルが開かれた時の初期データ取得
+//     useEffect(() => {
+//         fetchOccupyData();
+//     }, []);
+
+//     // `Occupy`データの取得処理
+//     const fetchOccupyData = async () => {
+//         try {
+//             const paddedRoomNumber = String(roomNumber).padStart(6, '0');
+//             const response = await fetch(`/api/v1/tags/${paddedRoomNumber}/occupy`);
+//             if (response.ok) {
+//                 const data = await response.json();
+//                 setOccupyId(data.id);
+//                 setCreatedAt(data.created_at);
+//                 setRegistrantName(data.registrant_name);
+//                 setRegistrantNumber(data.registrant_number);
+//             } else {
+//                 resetOccupyData();
+//             }
+//         } catch (error) {
+//             console.error("Error fetching occupy data:", error);
+//             resetOccupyData();
+//         }
+//     };
+
+//     // Occupyデータのリセット（占有がない場合）
+//     const resetOccupyData = () => {
+//         setOccupyId(null);
+//         setCreatedAt("");
+//         setRegistrantName("");
+//         setRegistrantNumber("");
+//     };
+
+//     // 会員番号入力時の処理
+//     const handleNumberChange = (e) => {
+//         setRegistrantNumber(e.target.value);
+//     };
+
+//     // 検索ボタンまたはEnterキーが押されたときの処理
+//     const handleSearch = async () => {
+//         try {
+//             const response = await fetch(`/api/v1/registrants/${registrantNumber}`);
+//             if (response.ok) {
+//                 const data = await response.json();
+//                 setRegistrantName(data.name || "該当する登録者が見つかりません");
+//             } else {
+//                 setRegistrantName("該当する登録者が見つかりません");
+//             }
+//         } catch (error) {
+//             setRegistrantName("エラーが発生しました");
+//         }
+//     };
+
+//     const handleKeyPress = (e) => {
+//         if (e.key === "Enter") {
+//             handleSearch();
+//         }
+//     };
+
+//     // Occupyの開始（貸し出し）ボタンの処理
+//     const handleStartOccupy = async () => {
+//         try {
+//             const paddedRegistrantNumber = String(registrantNumber).padStart(6, '0');
+//             const paddedRoomNumber = String(roomNumber).padStart(6, '0');
+//             const response = await fetch('/api/v1/occupies', {
+//                 method: 'POST',
+//                 headers: {
+//                     'Content-Type': 'application/json'
+//                 },
+//                 body: JSON.stringify({
+//                     occupy: {
+//                         registrant_id: paddedRegistrantNumber,
+//                         tag_id: paddedRoomNumber,
+//                         time_length: 0,
+//                         returned_at: null
+//                     }
+//                 })
+//             });
+
+//             if (response.ok) {
+//                 const data = await response.json();
+//                 setOccupyId(data.id);
+//                 setCreatedAt(data.created_at);
+//                 alert("貸し出しが開始されました");
+//                 await fetchOccupyData(); // データ再取得
+//             } else {
+//                 const errorData = await response.json();
+//                 alert(`貸し出しの開始に失敗しました: ${errorData.errors ? errorData.errors.join(', ') : 'エラー内容が取得できませんでした'}`);
+//             }
+//         } catch (error) {
+//             console.error("Error starting occupy:", error);
+//             alert("エラーが発生しました");
+//         }
+//     };
+
+//     // Occupyの終了（返却）ボタンの処理
+//     const handleEndOccupy = async () => {
+//         try {
+//             const response = await fetch(`/api/v1/occupies/${occupyId}`, {
+//                 method: 'PUT',
+//                 headers: {
+//                     'Content-Type': 'application/json'
+//                 },
+//                 body: JSON.stringify({
+//                     occupy: {
+//                         returned_at: new Date().toISOString()
+//                     }
+//                 })
+//             });
+
+//             if (response.ok) {
+//                 alert("貸し出しが終了しました");
+//                 resetOccupyData(); // データをリセット
+//                 await fetchOccupyData(); // データ再取得
+//             } else {
+//                 alert("貸し出しの終了に失敗しました");
+//             }
+//         } catch (error) {
+//             console.error("Error ending occupy:", error);
+//             alert("エラーが発生しました");
+//         }
+//     };
+
+//     return (
+//         <div className="modal-overlay" onClick={onClose}>
+//             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+//                 <button className="modal-close" onClick={onClose}>
+//                     &times;
+//                 </button>
+//                 <div className="modal-header">
+//                     <h3>Room {roomNumber}</h3>
+//                 </div>
+//                 <div className="modal-contents">
+//                     <div className="search-box">
+//                         <input
+//                             type="text"
+//                             placeholder="会員番号を入力..."
+//                             value={registrantNumber}
+//                             onChange={handleNumberChange}
+//                             onKeyDown={handleKeyPress} // Enterキーのイベントを追加
+//                         />
+//                         <button onClick={handleSearch}>Enter</button>
+//                     </div>
+//                     <section className="content-section">
+//                         <section className="left-section">
+//                             <p>{registrantName || "Registrant.Name"}</p>
+//                             <p>{registrantNumber || "Registrant.Number"}</p>
+//                         </section>
+//                         <section className="right-section">
+//                             {/* <p>Arrived_at: {createdAt ? new Date(createdAt).toLocaleString() : "N/A"}</p> */}
+//                             <p>Arrived_at : {createdAt ? new Date(createdAt).toLocaleString("ja-JP", { month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: false }) : "N/A"}</p>
+//                             <div className="time-circle">
+//                                 {/* 時間表示サークル */}
+//                             </div>
+//                         </section>
+//                     </section>
+//                 </div>
+//                 <div className="action-buttons">
+//                     <button onClick={handleStartOccupy} disabled={occupyId !== null || !registrantName}>
+//                         Start
+//                     </button>
+//                     <button onClick={handleEndOccupy} disabled={occupyId === null}>
+//                         End
+//                     </button>
+//                 </div>
+//             </div>
+//         </div>
+//     );
+// };
+
+// export default RoomModal;

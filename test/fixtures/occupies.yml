@@ -1,0 +1,9 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  time_length: 1
+  returned_at: 2024-11-17 15:25:23
+
+two:
+  time_length: 1
+  returned_at: 2024-11-17 15:25:23

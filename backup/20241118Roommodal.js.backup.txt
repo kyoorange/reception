@@ -1,0 +1,72 @@
+import React from "react";
+
+/*
+JavascriptからAPiにアクセスするコード（chatGPT謹製）
+＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
+*/
+
+// Fetchを使用したAPIリクエスト例
+async function fetchOccupies() {
+    const response = await fetch('/api/v1/occupies');
+    const data = await response.json();
+    console.log(data); // 取得したデータを確認
+}
+
+// 新しいOccupyを作成する例
+async function createOccupy(timeLength, returnedAt) {
+    const response = await fetch('/api/v1/occupies', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ occupy: { time_length: timeLength, returned_at: returnedAt } })
+    });
+    const data = await response.json();
+    console.log(data); // 作成したデータを確認
+}
+
+async function fetchRegistrants() {
+    const response = await fetch('/api/v1/registrants');
+    const data = await response.json();
+    console.log(data); // 取得したデータを確認
+}
+
+async function fetchTags() {
+    const response = await fetch('/api/v1/tags');
+    const data = await response.json();
+    console.log(data); // 取得したデータを確認
+}
+
+/*
+＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
+*/
+
+const RoomModal = ({ roomNumber, onClose }) => {
+    return (
+        <div className="modal-overlay" onClick={onClose}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                <button className="modal-close" onClick={onClose}>
+                    &times;
+                </button>
+                <div className="modal-header">
+                    <h2>Room {roomNumber}</h2>
+                </div>
+                <div className="modal-bodies">
+                    <section className="modal-body">
+                        <h3>Registrant.name</h3>
+                        <p>Registrant.number</p>
+                    </section>
+                    <section className="modal-body">
+                        <p>Remains: "created_at"+</p>
+                        <p>"tags.time_length"</p>
+                        <div className="time-circle">
+                            {/* ここに時間を表すサークルを表示する */}
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default RoomModal;
