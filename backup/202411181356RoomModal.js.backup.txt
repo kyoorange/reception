@@ -1,0 +1,75 @@
+import React, { useState } from "react";
+
+const RoomModal = ({ roomNumber, onClose }) => {
+    // 入力した会員番号（Registrant.number）を保存する状態
+    const [registrantNumber, setRegistrantNumber] = useState("");
+    // 検索結果としてのRegistrant.nameを保存する状態
+    const [registrantName, setRegistrantName] = useState("");
+
+    // 入力欄が変更されたときに呼ばれる関数
+    const handleNumberChange = (e) => {
+        setRegistrantNumber(e.target.value);
+    };
+
+    // 検索ボタンまたはEnterキーが押されたときに呼ばれる関数
+    const handleSearch = async () => {
+        try {
+            const response = await fetch(`/api/v1/registrants/${registrantNumber}`);
+            if (response.ok) {
+                const data = await response.json();
+                setRegistrantName(data.name || "該当する登録者が見つかりません");
+            } else {
+                setRegistrantName("該当する登録者が見つかりません");
+            }
+        } catch (error) {
+            console.error("Error fetching registrant:", error);
+            setRegistrantName("エラーが発生しました");
+        }
+    };
+
+    // Enterキーが押されたかどうかをチェック
+    const handleKeyPress = (e) => {
+        if (e.key === "Enter") {
+            handleSearch();
+        }
+    };
+
+    return (
+        <div className="modal-overlay" onClick={onClose}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                <button className="modal-close" onClick={onClose}>
+                    &times;
+                </button>
+                <div className="modal-header">
+                    <h2>Room {roomNumber}</h2>
+                </div>
+                <div className="modal-bodies0">
+                    {/* 左上に配置される検索ボックスと検索結果 */}
+                    <section className="left-section">
+                        <div className="search-box">
+                            <input
+                                type="text"
+                                placeholder="会員番号を入力..."
+                                value={registrantNumber}
+                                onChange={handleNumberChange}
+                                onKeyDown={handleKeyPress} // Enterキーのイベントを追加
+                            />
+                            <button onClick={handleSearch}>検索</button>
+                        </div>
+                        <h3>{registrantName||"Registrant.Name"}</h3>
+                    </section>
+                    {/* 右上に配置される日時とサークル */}
+                    <section className="right-section">
+                        <p>Remains: "created_at"</p>
+                        <p>"tags.time_length"</p>
+                        <div className="time-circle">
+                            {/* ここに時間を表すサークルを表示する */}
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default RoomModal;

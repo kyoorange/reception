@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EngineerCafeManager</title>
+    <meta name="csrf-token" content="<%= form_authenticity_token %>">
+</head>
+
+<body>
+    <header class="header">
+        <h1>handover and interests</h1>
+        <nav>
+            <a href="/">home</a>
+            <%= link_to "message", messages_path %>
+            <a href="memo">memo</a>
+            <a href="/analytics">analytics</a>
+            <a href="/admin">admin</a>
+        </nav>
+    </header>
+
+    <!-- 上部のカウンターボックスと検索ボックス -->
+    <div class="top-bar-message">
+        プライバシーに関わる情報は付箋ではなくここに書きましょう。
+    </div>
+
+    <div class="messages-area">
+        <!-- Handoverセクション -->
+        <section class="message-section">
+            <div class="search-box">
+                <input type="text" id="handover-author" placeholder="記入者を入力..." />
+                <input type="text" id="handover-content" placeholder="申し送り事項を入力..." />
+                <button onclick="saveMessage('Handover')">保存</button>
+            </div>
+            <div class="interests">Handover</div>
+            <div id="handover-list">
+                <% if @messages&.any? %>
+                <% @messages.each do |msg| %>
+                <% if msg.type == 'Handover' %>
+                <div class="message-card">
+                    <p><strong>内容:</strong> <%= msg.content %></p>
+                    <div class="message-card-downside">
+                        <strong>記入者:</strong> <%= msg.author %> <br>
+                        <strong>作成日時:</strong> <%= msg.created_at.strftime("%m/%d/%Y %H:%M") %>
+                    </div>
+                </div>
+                <% end %>
+                <% end %>
+                <% else %>
+                <div class="notcreated">messageがまだ登録されていません</div>
+                <% end %>
+            </div>
+        </section>
+
+        <!-- Interestセクション -->
+        <section class="message-section">
+            <div class="search-box">
+                <input type="text" id="interest-author" placeholder="記入者を入力..." />
+                <input type="text" id="interest-content" placeholder="今日のおやつを入力..." />
+                <button onclick="saveMessage('Interest')">保存</button>
+            </div>
+            <div class="interests">Interests</div>
+            <div id="interest-list">
+                <% if @messages&.any? %>
+                <% @messages.each do |msg| %>
+                <% if msg.type == 'Interest' %>
+                <div class="message-card">
+                    <p><strong>内容:</strong> <%= msg.content %></p>
+                    <div class="message-card-downside">
+                        <strong>記入者:</strong> <%= msg.author %> <br>
+                        <strong>作成日時:</strong> <%= msg.created_at.strftime("%m/%d/%Y %H:%M") %>
+                    </div>
+                </div>
+                <% end %>
+                <% end %>
+                <% else %>
+                <div class="notcreated">Interestsがまだ登録されていません</div>
+                <% end %>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        function saveMessage(type) {
+            const author = document.getElementById(`${type.toLowerCase()}-author`).value;
+            const content = document.getElementById(`${type.toLowerCase()}-content`).value;
+
+            fetch("/messages", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-Token": document.querySelector("[name='csrf-token']").content
+                    },
+                    body: JSON.stringify({
+                        message: {
+                            author: author,
+                            content: content,
+                            type: type // "Handover" または "Interest"
+                        }
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === "created") {
+                        // 入力欄をクリア
+                        document.getElementById(`${type.toLowerCase()}-author`).value = "";
+                        document.getElementById(`${type.toLowerCase()}-content`).value = "";
+
+                        // メッセージリストを更新
+                        fetchMessages(type); // 新たに取得したデータでリフレッシュ
+                    } else {
+                        alert("メッセージの作成に失敗しました");
+                    }
+                })
+                .catch(error => console.error("エラー:", error));
+        }
+
+        function fetchMessages(type) {
+            fetch(`/messages?type=${type}`)
+                .then(response => response.json())
+                .then(data => {
+                    const messageList = document.getElementById(`${type.toLowerCase()}-list`);
+                    messageList.innerHTML = ""; // リストをクリア
+
+                    data.messages.forEach(msg => {
+                        const newMessage = document.createElement("div");
+                        newMessage.classList.add("message-card");
+                        newMessage.innerHTML = `
+                        <p><strong>内容:</strong> ${msg.content}</p>
+                        <div class="message-card-downside">
+                            <strong>記入者:</strong> ${msg.author} <br>
+                            <strong>作成日時:</strong> ${new Date(msg.created_at).toLocaleString()}
+                        </div>
+                    `;
+                        messageList.appendChild(newMessage);
+                    });
+                })
+                .catch(error => console.error("エラー:", error));
+        }
+    </script>
+
+</body>
+
+</html>

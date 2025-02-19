@@ -1,0 +1,44 @@
+import React, { useState, useEffect } from "react";
+import RoomModal from "./RoomModal";
+
+const RoomCard = ({ roomNumber }) => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isOccupied, setIsOccupied] = useState(false); // Occupy 状態を保持
+
+    // `Occupy` データを取得して貸し出し状況を確認
+    useEffect(() => {
+        const fetchOccupyStatus = async () => {
+            try {
+                const paddedRoomNumber = String(roomNumber).padStart(6, "0"); // RoomNumber を6桁に
+                const response = await fetch(`/api/v1/tags/${paddedRoomNumber}/occupy`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setIsOccupied(data.status === "in_use"); // 状態が `in_use` なら占有中
+                } else {
+                    setIsOccupied(false); // データがない場合は未使用
+                }
+            } catch (error) {
+                console.error("Error fetching occupy status:", error);
+                setIsOccupied(false); // エラー時も未使用として扱う
+            }
+        };
+
+        fetchOccupyStatus();
+    }, [roomNumber]); // roomNumber が変わったときに再取得
+
+    const toggleModal = () => {
+        setIsModalOpen(!isModalOpen);
+    };
+
+    return (
+        <div className={`room-card ${isOccupied ? "occupied" : "available"}`} onClick={toggleModal}>
+            <div className="room-number">
+                {roomNumber}
+                {/* {isOccupied && <span className="status-tag">Occupied</span>} */}
+            </div>
+            {isModalOpen && <RoomModal roomNumber={roomNumber} onClose={toggleModal} />}
+        </div>
+    );
+};
+
+export default RoomCard;

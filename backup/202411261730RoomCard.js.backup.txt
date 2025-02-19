@@ -1,0 +1,19 @@
+import React, { useState } from "react";
+import RoomModal from "./RoomModal";
+
+const RoomCard = ({ roomNumber }) => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const toggleModal = () => {
+        setIsModalOpen(!isModalOpen);
+    };
+
+    return (
+        <div className="room-card" onClick={toggleModal}>
+            <div className="room-number">{roomNumber}</div>
+            {isModalOpen && <RoomModal roomNumber={roomNumber} onClose={toggleModal} />}
+        </div>
+    );
+};
+
+export default RoomCard;

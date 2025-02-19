@@ -1,0 +1,2 @@
+class Handover < Message
+end

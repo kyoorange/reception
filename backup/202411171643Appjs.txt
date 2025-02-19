@@ -1,0 +1,14 @@
+import React from "react";
+import RoomCard from "./RoomCard";
+
+const App = () => {
+    return (
+        <div className="room-container">
+            <RoomCard roomNumber="101" />
+            <RoomCard roomNumber="102" />
+            <RoomCard roomNumber="103" />
+        </div>
+    );
+};
+
+export default App;

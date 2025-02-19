@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EngineerCafeManager</title>
+</head>
+
+<body>
+    <header class="header">
+        <h1>home</h1>
+        <nav>
+            <a href="/">home</a>
+            <%= link_to "message", messages_path %>
+            <a href="/analytics">analytics</a>
+            <a href="/admin">admin</a>
+        </nav>
+    </header>
+
+    <!-- Reactで管理される部屋のカードを表示 -->
+    <div id="react-app"></div>
+</body>
+
+</html>
