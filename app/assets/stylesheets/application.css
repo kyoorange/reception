@@ -357,11 +357,11 @@ Roomcard用
 } */
 
 .room-card.available {
-    background-color: #2a382a; /* 空いている部屋の色 */
+    background-color: #26382B; /* 空いている部屋の色 */
 }
 
 .room-card.occupied {
-    background-color: #ff4d4f; /* 占有中の部屋の色 */
+    background-color: #954265; /* 占有中の部屋の色 */
     color: #fff; /* テキストの色を白に */
 }
 
@@ -386,6 +386,7 @@ Roomcard用
     margin-left: 8px;
 }
 
+/* リフレッシュボタンのスタイルを削除する */
 .refresh-button {
     background-color: #00bae0; /* ボタンの背景色 */
     color: white; /* ボタンのテキスト色 */

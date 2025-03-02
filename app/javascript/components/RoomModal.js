@@ -7,13 +7,16 @@ const RoomModal = ({ roomNumber, onClose, onStatusChange }) => {
     const [occupyId, setOccupyId] = useState(null);
     const [createdAt, setCreatedAt] = useState("");
     const [rotation, setRotation] = useState(0);
+    const [statusChanged, setStatusChanged] = useState(false);
 
-    const LIMIT_IN_SECONDS = 2 * 60 * 60; // 2時間のリミット（秒）
+    const LIMIT_IN_SECONDS = 2 * 60 * 60;
 
-    // 利用中のエフェクト
+    // 利用中のエフェクト - 初回のみデータを取得し、その後は時計の更新のみを行う
     useEffect(() => {
+        // 初回のみデータを取得
         fetchOccupyData();
 
+        // 時計の更新処理
         if (createdAt) {
             const interval = setInterval(() => {
                 const elapsedSeconds = (new Date() - new Date(createdAt)) / 1000;
@@ -49,7 +52,6 @@ const RoomModal = ({ roomNumber, onClose, onStatusChange }) => {
             resetOccupyData();
         }
     };
-
 
     const resetOccupyData = () => {
         setOccupyId(null);
@@ -119,6 +121,7 @@ const RoomModal = ({ roomNumber, onClose, onStatusChange }) => {
                 const data = await response.json();
                 setOccupyId(data.id);
                 setCreatedAt(data.created_at);
+                setStatusChanged(true);
                 alert("貸し出しが開始されました");
                 await fetchOccupyData();
             } else {
@@ -151,7 +154,8 @@ const RoomModal = ({ roomNumber, onClose, onStatusChange }) => {
 
             if (response.ok) {
                 resetOccupyData();
-                await fetchOccupyData(); // 強制的にデータを再取得
+                setStatusChanged(true);
+                await fetchOccupyData();
                 alert("占有を正常に終了しました");
             } else {
                 alert("占有の終了に失敗しました");
@@ -163,8 +167,10 @@ const RoomModal = ({ roomNumber, onClose, onStatusChange }) => {
     };
 
     const handleClose = () => {
-        onStatusChange(); // 状態を更新するためのコールバックを呼び出す
-        onClose(); // モーダルを閉じる
+        if (statusChanged && onStatusChange) {
+            onStatusChange();
+        }
+        onClose();
     };
 
     return (
