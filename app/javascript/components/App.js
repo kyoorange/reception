@@ -10,45 +10,53 @@ const App = () => {
     const terraceRooms = [41, 42, 43, 44];
 
     const [occupyStatuses, setOccupyStatuses] = useState({});
+    const [error, setError] = useState(null);
 
     const fetchOccupyStatuses = async () => {
         try {
-            const response = await fetch("/api/v1/occupies/occupy_status");
+            const response = await fetch('/api/v1/occupies/all_room_statuses', {
+                headers: {
+                    'Cache-Control': 'no-cache, no-store, must-revalidate',
+                    'Pragma': 'no-cache',
+                    'Expires': '0'
+                }
+            });
+            
             if (response.ok) {
                 const data = await response.json();
-                const statusMap = data.reduce((acc, item) => {
-                    acc[item.room_number] = item.status;
-                    return acc;
-                }, {});
-                setOccupyStatuses(statusMap);
+                setOccupyStatuses(data);
             } else {
-                console.error("Failed to fetch occupy statuses");
+                setError("Error fetching occupy statuses");
             }
         } catch (error) {
             console.error("Error fetching occupy statuses:", error);
+            setError("Error fetching occupy statuses");
         }
     };
 
     useEffect(() => {
         fetchOccupyStatuses();
+        
+        const interval = setInterval(() => {
+            fetchOccupyStatuses();
+        }, 60000);
+        
+        return () => clearInterval(interval);
     }, []);
-
-    const handleRefresh = () => {
-        fetchOccupyStatuses(); // リフレッシュボタンがクリックされたときに状態を再取得
-    };
 
     return (
         <div className="main-content">
+            {error && <div className="error-message">{error}</div>}
             <div className="left-container">
                 <section className="section">
                     <h2>HALL</h2>
-                    <button onClick={handleRefresh} className="refresh-button">リフレッシュ</button>
                     <div className="main-hall">
                         {mainHallRooms.map((roomNumber) => (
                             <RoomCard
                                 key={roomNumber}
                                 roomNumber={roomNumber}
                                 status={occupyStatuses[roomNumber] || null}
+                                onStatusChange={fetchOccupyStatuses}
                             />
                         ))}
                     </div>
@@ -62,6 +70,7 @@ const App = () => {
                                     key={roomNumber}
                                     roomNumber={roomNumber}
                                     status={occupyStatuses[roomNumber] || null}
+                                    onStatusChange={fetchOccupyStatuses}
                                 />
                             ))}
                         </div>
@@ -74,6 +83,7 @@ const App = () => {
                                     key={roomNumber}
                                     roomNumber={roomNumber}
                                     status={occupyStatuses[roomNumber] || null}
+                                    onStatusChange={fetchOccupyStatuses}
                                 />
                             ))}
                         </div>
@@ -86,6 +96,7 @@ const App = () => {
                                     key={roomNumber}
                                     roomNumber={roomNumber}
                                     status={occupyStatuses[roomNumber] || null}
+                                    onStatusChange={fetchOccupyStatuses}
                                 />
                             ))}
                         </div>
@@ -101,6 +112,7 @@ const App = () => {
                                 key={roomNumber}
                                 roomNumber={roomNumber}
                                 status={occupyStatuses[roomNumber] || null}
+                                onStatusChange={fetchOccupyStatuses}
                             />
                         ))}
                     </div>
@@ -113,6 +125,7 @@ const App = () => {
                                 key={roomNumber}
                                 roomNumber={roomNumber}
                                 status={occupyStatuses[roomNumber] || null}
+                                onStatusChange={fetchOccupyStatuses}
                             />
                         ))}
                     </div>

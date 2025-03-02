@@ -1,7 +1,6 @@
 module Api
   module V1
     class OccupiesController < ApplicationController
-      # CSRFトークンの検証をスキップ
       protect_from_forgery with: :null_session
 
       def index
@@ -12,7 +11,7 @@ module Api
       def show
       occupy = Occupy.find_by(tag_id: params[:tag_id])
         if occupy
-          expires_now  # キャッシュを無効化
+          # expires_now
           render json: occupy
         else
           head :not_found
@@ -76,6 +75,21 @@ module Api
         occupy = Occupy.find(params[:id])
         occupy.destroy
         render json: { message: "Occupy record deleted" }, status: :ok
+      end
+
+      def all_room_statuses
+        occupies = Occupy.joins(:tag)
+                        .select("tags.number AS room_number, occupies.status")
+                        .where(status: :in_use)
+                        .order("tags.number")
+        
+        # 結果をハッシュマップに変換
+        result = {}
+        occupies.each do |occupy|
+          result[occupy.room_number.to_i] = occupy.status
+        end
+        
+        render json: result
       end
 
       private

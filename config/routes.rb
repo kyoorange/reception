@@ -13,7 +13,12 @@ Rails.application.routes.draw do
         get "phone/:phone", on: :collection, action: :find_by_phone
       end
 
-      resources :occupies, only: [ :index, :create, :update, :destroy ]
+      resources :occupies, only: [ :index, :create, :update, :destroy ] do
+        collection do
+          get 'occupy_status'
+          get 'all_room_statuses'
+        end
+      end
     end
   end
 

@@ -1,11 +1,17 @@
 import React, { useState } from "react";
 import RoomModal from "./RoomModal";
 
-const RoomCard = ({ roomNumber, status }) => {
+const RoomCard = ({ roomNumber, status, onStatusChange }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const toggleModal = () => {
         setIsModalOpen(!isModalOpen);
+        if (!isModalOpen) {
+            // モーダルを開くときは何もしない
+        } else {
+            // モーダルを閉じるときに状態を更新
+            onStatusChange();
+        }
     };
 
     // 状態に応じてCSSクラスを切り替える
@@ -25,7 +31,7 @@ const RoomCard = ({ roomNumber, status }) => {
     return (
         <div className={getClassName()} onClick={toggleModal}>
             <div className="room-number">{roomNumber}</div>
-            {isModalOpen && <RoomModal roomNumber={roomNumber} onClose={toggleModal} />}
+            {isModalOpen && <RoomModal roomNumber={roomNumber} onClose={toggleModal} onStatusChange={onStatusChange} />}
         </div>
     );
 };

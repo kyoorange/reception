@@ -1,18 +1,14 @@
 module Api
   module V1
     class RegistrantsController < ApplicationController
-      # APIではCSRFトークンの検証をスキップ
       protect_from_forgery with: :null_session
 
-      # 全てのregistrantsを返す
       def index
         registrants = Registrant.all
         render json: registrants
       end
 
-      # numberで指定したregistrantを返す
       def show
-        # `number`を使って検索
         registrant = Registrant.find_by(number: params[:id])
 
         if registrant
