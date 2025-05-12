@@ -60,4 +60,4 @@ gem "shakapacker", "= 8.0.0"
 
 gem "react-rails", "= 3.2"
 
-gem "psych", "~> 4.0.0"
+gem "psych", "~> 5.2.5"
