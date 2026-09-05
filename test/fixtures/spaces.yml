@@ -1,9 +1,14 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
+# No model exists for this table, so fixture timestamps must be explicit.
 one:
+  created_at: 2024-11-17 14:44:55
+  updated_at: 2024-11-17 14:44:55
   tag_id: MyString
   time: 2024-11-17 14:44:55
 
 two:
+  created_at: 2024-11-17 14:44:55
+  updated_at: 2024-11-17 14:44:55
   tag_id: MyString
   time: 2024-11-17 14:44:55

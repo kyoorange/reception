@@ -1,9 +1,12 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 one:
-  time_length: 1
-  returned_at: 2024-11-17 15:25:23
+  registrant: one
+  tag: one
+  status: in_use
+  time_length: 60
 
 two:
-  time_length: 1
+  registrant: two
+  tag: two
+  status: returned
+  time_length: 30
   returned_at: 2024-11-17 15:25:23

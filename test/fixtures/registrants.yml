@@ -1,31 +1,11 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 one:
-  city: MyText
-  address1: MyText
-  address2: MyText
-  belongs: MyText
-  details: MyText
-  email: MyText
-  found: MyText
-  job: MyText
-  name: MyText
-  number: MyText
-  phone: MyText
-  prefecture: MyText
-  pronunciation: MyText
+  name: Test Member One
+  number: "1001"
+  email: member-one@example.com
+  phone: "090-0000-0001"
 
 two:
-  city: MyText
-  address1: MyText
-  address2: MyText
-  belongs: MyText
-  details: MyText
-  email: MyText
-  found: MyText
-  job: MyText
-  name: MyText
-  number: MyText
-  phone: MyText
-  prefecture: MyText
-  pronunciation: MyText
+  name: Test Member Two
+  number: "1002"
+  email: member-two@example.com
+  phone: "090-0000-0002"
