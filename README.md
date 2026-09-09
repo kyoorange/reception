@@ -9,19 +9,24 @@
 - **管理画面**：利用者、部屋に対応するタグ、利用履歴、管理者を ActiveAdmin で管理。
 - **メッセージ**：引き継ぎなどのメッセージを投稿・一覧表示。
 
-## **アーキテクチャ**
+## アーキテクチャ
 
 Rails がHTML・JSON API・管理画面を提供し、受付画面に組み込んだ React が `/api/v1` のAPIを呼び出します。React 専用の別サーバーは不要です。
 
-```text
-ブラウザ（Rails画面 + React）
-          │ HTML / JSON
-          ▼
-Rails / Puma ── ActiveAdmin + Devise（管理画面・認証）
-          │ Active Record
-          ▼
-        SQLite3
-```****
+```mermaid
+flowchart TD
+    browser["ブラウザ：Rails画面 + React"]
+    subgraph server["Rails / Puma"]
+        app["HTML・JSON API"]
+        admin["ActiveAdmin + Devise<br/>管理画面・認証"]
+        orm["Active Record"]
+        app --> orm
+        admin --> orm
+    end
+    browser <-->|"HTML / JSON"| app
+    browser <-->|"管理画面"| admin
+    orm <--> db[(SQLite3)]
+```
 
 | 構成 | 技術・主な配置場所 |
 | --- | --- |
